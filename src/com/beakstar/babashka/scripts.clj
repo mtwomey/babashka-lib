@@ -6,7 +6,15 @@
          '[selmer.parser :as parser]
          '[selmer.filters :as filters])
 
-(defmacro << [& rest] `(parser/<< ~@rest))
+(defmacro <<
+  "Re-wraps selmer.parser/<< for reduced deps. Also added \"qq\" filter.
+
+
+  Resolves the variables from your template string from the local-env, or the
+  namespace and puts them into your template for you.
+
+  e.g. (let [a 1] (<< \"{{a}} + {{a}} = 2\")) ;;=> \"1 + 1 = 2\" "
+  [& rest] `(parser/<< ~@rest))
 
 (filters/add-filter! :qq (fn [%] [:safe (str "\"" % "\"")]))
 
