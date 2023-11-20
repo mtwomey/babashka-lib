@@ -6,6 +6,8 @@
          '[selmer.parser :as parser]
          '[selmer.filters :as filters])
 
+(import [java.security SecureRandom])
+
 (defmacro <<
   "Re-wraps selmer.parser/<< for reduced deps. Also added \"qq\" filter.
 
@@ -58,3 +60,28 @@
   "Double quote a string. For use in calling external shell commands."
   [string]
   (str "\"" string "\""))
+
+(defn random-number
+  "Return a random integer from 0 to max (inclusive). If min is not
+  supplied, zero is assumed."
+  ([min max]
+   (+ min (.nextInt (SecureRandom.) (- (inc max) min))))
+  ([max]
+   (random-number 0 max)))
+
+(defn remove-nth
+  "Returns a lazy sequence with the element at the index location
+  removed."
+  [coll index]
+  (concat (take index coll) (drop (inc index) coll)))
+
+(defn take-random
+  "Returns a sequece consisting of n random elements from the collection."
+  [n coll]
+  (loop [coll (seq coll)
+         results []]
+    (let [index (.nextInt (SecureRandom.) (count coll))
+          results (conj results (nth coll index))]
+      (if (= n (count results))
+        results
+        (recur (remove-nth coll index) results)))))
