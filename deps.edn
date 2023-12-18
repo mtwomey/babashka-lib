@@ -5,4 +5,4 @@
                    :ns-default build},
            :opts {:transitive true,
                   :lib com.beakstar/babashka,
-                  :version "0.1.2"}}}
+                  :version "0.1.3"}}}

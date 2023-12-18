@@ -85,3 +85,12 @@
       (if (= n (count results))
         results
         (recur (remove-nth coll index) results)))))
+
+(defn assoc-if
+  "Takes a predicate, collection, and additional values to assoc.
+  If the predicate is truthy, the values will be assoc'd to to the
+  collection and the collection returned. If the predicate is
+  falsy, the original collection will be returned."
+  [pred coll & rest]
+  (if pred (apply assoc coll rest)
+      coll))
